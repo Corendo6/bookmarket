@@ -1,6 +1,7 @@
 package com.market.page;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.text.SimpleDateFormat;
@@ -45,6 +46,7 @@ public class OrderHistoryPage extends JTable {
 		shippingPanel.setBounds(0, 0, 700, 500);
 		shippingPanel.setLayout(null);
 		panel.add(shippingPanel);
+		shippingPanel.setPreferredSize(new Dimension(600, 400));
 
 		printBillInfo(orderMember);
 	}
@@ -58,9 +60,16 @@ public class OrderHistoryPage extends JTable {
 		MarketFont.getFont(label01);
 		panel01.add(label01);
 		shippingPanel.add(panel01);
+		
+		JPanel panel00 = new JPanel();
+		panel00.setBounds(0, 30, 500, 30);
+		JLabel label00 = new JLabel("주문 번호 : " + orderMember.getOid());
+		MarketFont.getFont(label00);
+		panel00.add(label00);
+		shippingPanel.add(panel00);
 
 		JPanel panel02 = new JPanel();
-		panel02.setBounds(0, 30, 500, 30);
+		panel02.setBounds(0, 60, 500, 30);
 		JLabel label02 = new JLabel("고객명 : " + orderMember.getName() + "             연락처 :      " + orderMember.getPhone());
 		label02.setHorizontalAlignment(JLabel.LEFT);
 		MarketFont.getFont(label02);
@@ -68,7 +77,7 @@ public class OrderHistoryPage extends JTable {
 		shippingPanel.add(panel02);
 
 		JPanel panel03 = new JPanel();
-		panel03.setBounds(0, 60, 500, 30);
+		panel03.setBounds(0, 90, 500, 30);
 		JLabel label03 = new JLabel("배송지 : " + orderMember.getOaddr() + "                 발송일 :       " + orderMember.getOdate());
 		label03.setHorizontalAlignment(JLabel.LEFT);
 		MarketFont.getFont(label03);
@@ -76,7 +85,7 @@ public class OrderHistoryPage extends JTable {
 		shippingPanel.add(panel03);
 
 		JPanel printPanel = new JPanel();
-		printPanel.setBounds(0, 100, 500, 300);
+		printPanel.setBounds(0, 130, 500, 300);
 		printCart(printPanel);
 		shippingPanel.add(printPanel);
 	}
@@ -85,7 +94,7 @@ public class OrderHistoryPage extends JTable {
 
 		JPanel panel01 = new JPanel();
 		panel01.setBounds(0, 0, 500, 5);
-		JLabel label01 = new JLabel("      장바구니 상품 목록 :");
+		JLabel label01 = new JLabel("      결제 상품 목록 :");
 		MarketFont.getFont(label01);
 		panel01.add(label01);
 		panel.add(panel01);
@@ -108,9 +117,9 @@ public class OrderHistoryPage extends JTable {
 		panel04.setBounds(0, 30, 500, 5);
 
 		JPanel panel05 = new JPanel(new GridLayout(orderDao.getSize(orderMember.getMid().toUpperCase()), 1));
-		ArrayList<OrderVo> orderList = orderDao.select(orderMember.getMid().toUpperCase());
+		ArrayList<OrderVo> orderList = orderDao.select(orderMember.getOid());
 		int sum = 0;
-		for (int i = 0; i < orderList.size(); i++) { // 13
+		for (int i = 0; i < orderList.size(); i++) {
 			OrderVo item = orderList.get(i);
 			panel05.setBounds(50, 25 + (i * 5), 500, 5);
 			panel05.setBackground(Color.GRAY);
@@ -124,7 +133,7 @@ public class OrderHistoryPage extends JTable {
 		}
 
 		JPanel panel06 = new JPanel();
-		panel06.setBounds(0, 35 + (orderDao.getSize(orderMember.getMid().toUpperCase()) * 5), 500, 5);
+		panel06.setBounds(0, 35 + (orderDao.getSize(orderMember.getOid().toUpperCase()) * 5), 500, 5);
 		JLabel label06 = new JLabel("--------------------------------------");
 		MarketFont.getFont(label06);
 		panel06.add(label06);
@@ -136,43 +145,6 @@ public class OrderHistoryPage extends JTable {
 		MarketFont.getFont(label07);
 		panel07.add(label07);
 		panel.add(panel07);
-
-		/** 주문 확정 버튼 **/
-//		JPanel panel08 = new JPanel();
-//		panel08.setBounds(0, 40 + (orderDao.getSize(orderMember.getMid().toUpperCase()) * 5), 500, 5);
-//		JButton btnOrderFinish = new JButton("주문 확정");
-//		MarketFont.getFont(btnOrderFinish);
-//		panel08.add(btnOrderFinish);
-//		panel.add(panel08);
-
-//		btnOrderFinish.addActionListener(e -> {
-//			int select = JOptionPane.showConfirmDialog(null, "정말로 주문을 확정하겠습니까?");
-//			if (select == 0) {
-//				// 오더 테이블에 저장할 데이터 생성
-//				// oid, odate, qty리스트, isbn 리스트, mid, name, phone, addr
-//				// qty리스트, isbn 리스트 => CartDao에서 생성 후 orderVo 타입으로 리턴
-//				OrderVo orderVo = cartDao.getOrderVo(orderMember.getMid().toUpperCase());
-//				// oid, odate => UUID, Calendar 클래스를 이용해 생성
-//				UUID uuid = UUID.randomUUID();
-//				Calendar cal = Calendar.getInstance();
-//				String oid = uuid.toString();
-//				String odate = cal.get(Calendar.YEAR) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DATE);
-//				orderVo.setOid(oid);
-//				orderVo.setOdate(odate);
-//				// mid, name, phone, addr => orderMember 객체에서 가져옴
-//				orderVo.setMid(orderMember.getMid());
-//				orderVo.setName(orderMember.getName());
-//				orderVo.setPhone(orderMember.getPhone());
-//				orderVo.setOaddr(orderMember.getAddr());
-//				
-//				OrderDao orderDao = new OrderDao();
-//				int result = orderDao.insertPrepared(orderVo);
-//				if (result >= 1) {
-//					JOptionPane.showMessageDialog(null, "주문이 완료되었습니다");
-//					cartDao.deleteAll(orderMember.getMid().toUpperCase());
-//				}
-//			}
-//		});
 
 	}
 }
