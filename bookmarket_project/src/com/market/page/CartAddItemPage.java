@@ -143,7 +143,7 @@ public class CartAddItemPage extends JPanel {
 							JOptionPane.showMessageDialog(addButton, "장바구니에 추가되었습니다.");
 						}
 					} else {
-						JOptionPane.showMessageDialog(addButton, "이미 등록된 도서입니다.");
+						JOptionPane.showMessageDialog(addButton, "이미 장바구니에 있는 도서입니다.");
 					}
 
 				}

@@ -102,6 +102,16 @@ public class AdminLoginDialog extends JDialog implements ActionListener {
 //		});
 	}
 
+	public int adminValidationCheck(int selectResult) {
+		int result = 0;
+		String uid = idField.getText().trim().toUpperCase();
+		String upass = pwField.getText().trim();
+		if (selectResult == 1) {
+			if (uid.equals("ADMIN1234") && upass.equals("ADMIN1234"))
+				result = 1;
+		}
+		return result;
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
@@ -109,7 +119,7 @@ public class AdminLoginDialog extends JDialog implements ActionListener {
 			String uid = idField.getText().trim().toUpperCase();
 			String upass = pwField.getText().trim();
 			
-			if (memberDao.select(uid, upass) == 1) {
+			if (adminValidationCheck(memberDao.select(uid, upass)) == 1) {
 				isLogin = true;
 				dispose();
 			} else
